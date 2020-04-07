@@ -1,7 +1,0 @@
-{
-    "board": "arduino:avr:uno",
-    "programmer": "AVRISP mkII",
-    "port": "/dev/tty.usbmodem146201",
-    "sketch": "server/server.ino",
-    "output": "build"
-}
