@@ -1,3 +1,5 @@
 .vscode
 arduino/build
 secret.h
+node_modules
+*.env
