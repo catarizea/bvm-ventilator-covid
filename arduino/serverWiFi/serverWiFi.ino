@@ -1,3 +1,4 @@
+#include <LiquidCrystal.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
@@ -5,6 +6,11 @@
 #include <Arduino_JSON.h>
 #include "secret.h"
 #include "translations.h"
+
+LiquidCrystal lcd(2, 0, 15, 13, 12, 14);
+
+const int translatorOEPin = 4;
+const int translatorDelay = 10000;
 
 const char* ssid     = ssidSecret;
 const char* password = passSecret;
@@ -24,7 +30,7 @@ int prevBpm = 0;
 int prevInspDuration = 0;
 
 void handleRoot() {
-  if (server.method() == HTTP_GET) {
+  if (server.method() == HTTP_GET) {    
     JSONVar status;
     
     status["ip"] = WiFi.localIP().toString();
@@ -35,7 +41,7 @@ void handleRoot() {
     server.send(200, "application/json", jsonString);
   }
 
-  if (server.method() == HTTP_POST) {
+  if (server.method() == HTTP_POST) {    
     JSONVar newSettings = JSON.parse(server.arg("plain"));
 
     if (JSON.typeof(newSettings) == "undefined") {
@@ -71,11 +77,15 @@ void handleNotFound() {
 }
 
 void setup(void) {
+  pinMode(translatorOEPin, OUTPUT);
+  digitalWrite(translatorOEPin, LOW);
+  
   Serial.begin(115200);
+  
   WiFi.begin(ssid, password);
-  Serial.println("");
   WiFi.config(ip, gateway, subnet);
 
+  Serial.println("");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -96,6 +106,16 @@ void setup(void) {
 
   server.begin();
   Serial.println("HTTP server started");
+
+  digitalWrite(translatorOEPin, HIGH);
+  Serial.println("Translator output enabled. Waiting for " + String(translatorDelay / 1000) + " seconds...");
+  delay(translatorDelay);
+  
+  
+  lcd.begin(16, 2);
+  lcd.print(settings);
+  lcd.setCursor(0, 1);
+  lcd.print(noSettings);
 }
 
 void loop(void) {
@@ -105,6 +125,12 @@ void loop(void) {
     
     Serial.println(firstRow);
     Serial.println(secondRow);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(firstRow);
+    lcd.setCursor(0, 1);
+    lcd.print(secondRow);
     
     prevVolume = volume;
     prevBpm = bpm;
