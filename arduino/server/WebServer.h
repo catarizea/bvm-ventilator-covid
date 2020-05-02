@@ -1,6 +1,6 @@
 /*
   WebServer.h - Library for ESP8266 web server
-  Creted by Catalin Rizea, May 1, 2020
+  Created by Catalin Rizea, May 1, 2020
   Released into the public domain 
 */
 #ifndef WebServer_h

@@ -1,3 +1,8 @@
+/*
+  Server.ino - Sketch file to control a BVM Ventilator for COVID-19
+  Created by Catalin Rizea, May 1, 2020
+  Released into the public domain 
+*/
 #include "WebServer.h"
 #include "Lcd.h"
 
