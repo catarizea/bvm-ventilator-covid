@@ -15,9 +15,9 @@ class Lcd {
     Lcd();
     void start();
     void printSettings(int volume, int bpm, int inspiration, int expiration);
-    String getValuesAsString();
+    String getSettingsAsString();
   private:
-    void setValues(int volume, int bpm, int inspiration, int expiration);
+    void setSettings(int volume, int bpm, int inspiration, int expiration);
     int _volume;
     int _bpm;
     int _inspiration;

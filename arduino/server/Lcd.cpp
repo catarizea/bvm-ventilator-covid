@@ -22,7 +22,7 @@ void Lcd::start() {
   this->_lcd.print(noSettings);
 }
 
-void Lcd::setValues(int volume, int bpm, int inspiration, int expiration) {
+void Lcd::setSettings(int volume, int bpm, int inspiration, int expiration) {
   this->_volume = volume;
   this->_bpm = bpm;
   this->_inspiration = inspiration;
@@ -30,7 +30,7 @@ void Lcd::setValues(int volume, int bpm, int inspiration, int expiration) {
 }
 
 void Lcd::printSettings(int volume, int bpm, int inspiration, int expiration) {
-  this->setValues(volume, bpm, inspiration, expiration);
+  this->setSettings(volume, bpm, inspiration, expiration);
   
   String secondRow = "TiV " + String(volume) + " ml";
   String thirdRow = "BPM " + String(bpm) + " resp/min";
@@ -47,6 +47,6 @@ void Lcd::printSettings(int volume, int bpm, int inspiration, int expiration) {
   this->_lcd.print(fourthRow);
 }
 
-String Lcd::getValuesAsString() {
+String Lcd::getSettingsAsString() {
   return "Volume=" + String(this->_volume) + " BPM=" + String(this->_bpm) + " I:E=" + String(this->_inspiration) + ":" + String(this->_expiration);
 }
