@@ -84,7 +84,7 @@ void loop() {
       } else {
         Serial.println("Stepper is back at zero");
         newStepperParams = false;
-        isClockWise == true;
+        isClockWise = true;
       }
     }
     
