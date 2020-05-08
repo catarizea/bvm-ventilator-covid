@@ -229,8 +229,8 @@ void computeNewParams() {
   
   // Compute steps to move 
   // TODO measure precise volumes to determine 
-  // the corelation between piston amplitude and pushed volume of air
-  // the current formula assumes a linear corelation
+  // the correlation between piston amplitude and pushed volume of air
+  // the current formula assumes a linear correlation
   stepperParams[0] = ceil((float(stepsPerRevolution) / 2) * (float(settings[0]) / float(maxBVMVolume)));
 
   const float secondsPerFraction = 60 / ((float(settings[2]) + float(settings[3])) * float(settings[1]));

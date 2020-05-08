@@ -1,5 +1,5 @@
 /*
-  Lcd.h - Library for printing data on a LCD 2004 via I2C
+  Lcd.cpp - Library for printing data on a LCD 2004 via I2C
   Created by Catalin Rizea, May 1, 2020
   Released into the public domain 
 */
