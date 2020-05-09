@@ -62,10 +62,14 @@ void loop(void) {
     delay(500);
   } else {
     if (messageSent == false) {
-      server.setSensorValue(1, 800);
+      server.setSensorValue(0, 800);
+      server.setSensorValue(1, 110);
+      server.setSensorValue(2, 245);
       messageSent = true;
     } else {
-      server.setSensorValue(1, 400);
+      server.setSensorValue(0, 400);
+      server.setSensorValue(1, 500);
+      server.setSensorValue(2, 52);
       messageSent = false;
     }
 

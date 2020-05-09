@@ -23,22 +23,19 @@ void ServerBLE::start() {
   BLEService *flowService = this->createBLEService(
     0,
     SERVICE_UUID_FLOW,
-    CHARACTERISTIC_UUID_FLOW,
-    "flow"
+    CHARACTERISTIC_UUID_FLOW
   );
 
   BLEService *volumeService = this->createBLEService(
     1,
     SERVICE_UUID_VOLUME,
-    CHARACTERISTIC_UUID_VOLUME,
-    "volume"
+    CHARACTERISTIC_UUID_VOLUME
   );
 
   BLEService *pressureService = this->createBLEService(
     2,
     SERVICE_UUID_PRESSURE,
-    CHARACTERISTIC_UUID_PRESSURE,
-    "pressure"
+    CHARACTERISTIC_UUID_PRESSURE
   );
 
   flowService->start();
@@ -61,8 +58,7 @@ void ServerBLE::start() {
 BLEService* ServerBLE::createBLEService(
   byte type,  
   char* serviceUUID, 
-  char* characteristicUUID,
-  std::string descriptorValue
+  char* characteristicUUID
 ) {
   BLEService *service = this->_server->createService(serviceUUID);
   
@@ -73,10 +69,6 @@ BLEService* ServerBLE::createBLEService(
   );
   
   characteristic->addDescriptor(new BLE2902());
-  
-  BLEDescriptor descriptor(DESCRIPTOR_UUID);
-  descriptor.setValue(descriptorValue);
-  characteristic->addDescriptor(&descriptor);
 
   switch (type) {
     case 0:
@@ -85,7 +77,7 @@ BLEService* ServerBLE::createBLEService(
     case 1:
       this->_volumeCharacteristic = characteristic;
       break;
-    default:
+    case 2:
       this->_pressureCharacteristic = characteristic;
       break;
   }
@@ -94,18 +86,24 @@ BLEService* ServerBLE::createBLEService(
 }
 
 void ServerBLE::setSensorValue(byte sensor, uint16_t value) {
+  char buffer[20];
+  
   switch (sensor) {
     case 0:
-      this->_flowCharacteristic->setValue(value);
+      dtostrf(value, 1, 2, buffer);
+      this->_flowCharacteristic->setValue((char*)&buffer);
       this->_flowCharacteristic->notify();
       break;
     case 1:
-      this->_volumeCharacteristic->setValue(value);
+      dtostrf(value, 1, 0, buffer);
+      this->_volumeCharacteristic->setValue((char*)&buffer);
       this->_volumeCharacteristic->notify();
       break;
-    default:
-      this->_pressureCharacteristic->setValue(value);
+    case 2:
+      dtostrf(value, 1, 4, buffer);
+      this->_pressureCharacteristic->setValue((char*)&buffer);
       this->_pressureCharacteristic->notify();
       break;
   }
 }
+
