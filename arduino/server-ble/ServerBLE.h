@@ -22,7 +22,13 @@ class ServerBLE {
     BLECharacteristic *_volumeCharacteristic;
     BLECharacteristic *_flowCharacteristic;
     BLECharacteristic *_pressureCharacteristic;
-    BLEService *createBLEService(
+    BLECharacteristic *_settingsCharacteristic;
+    BLEService *createBLEReadService(
+      byte type,  
+      char* serviceUUID, 
+      char* characteristicUUID
+    );
+     BLEService *createBLEWriteService(
       byte type,  
       char* serviceUUID, 
       char* characteristicUUID
