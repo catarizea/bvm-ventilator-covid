@@ -153,4 +153,9 @@ void ServerBLE::setSensorValue(byte sensor, uint16_t value) {
   }
 }
 
+std::string ServerBLE::getSettings() {
+  return this->_settingsCharacteristic->getValue();
+}
+
+
 

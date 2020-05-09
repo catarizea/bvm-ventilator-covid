@@ -16,7 +16,7 @@ const int translatorOEPin = 23;
 const int translatorDelay = 10000;
 
 const int size = 4;
-int settings[size] = {0, 0 , 0 , 0};
+int settings[size] = {0, 0, 0, 0};
 int prevSettings[size] = {0, 0, 0, 0};
 
 TwoWire I2Ctwo = TwoWire(1);
@@ -41,6 +41,8 @@ void setup(void) {
 }
 
 void loop(void) {
+  refreshSettings();
+  
   if (checkIfNewValues(settings, prevSettings, size) == true) {
     lcd.printSettings(settings[0], settings[1], settings[2], settings[3]);
 
@@ -55,6 +57,7 @@ void loop(void) {
       if (i < size - 1) {
         I2Ctwo.write("x");
       }
+      prevSettings[i] = settings[i];
     }
 
     I2Ctwo.endTransmission();
@@ -87,4 +90,32 @@ bool checkIfNewValues(int *arr1, int *arr2, byte size) {
   }
 
   return hasNewValues;
+}
+
+void refreshSettings() {
+  std::string value = server.getSettings();
+
+  if (value.length() == 0) {
+    return;
+  }
+
+  // Serial.println(value.c_str());
+  
+  int j = 0;
+  String currentValue = "";
+  
+  for (int i = 0; i < value.length(); i++) {
+    if (String(value[i]) != "x") {
+      currentValue = currentValue + String(value[i]);
+    } else {
+      if (settings[j] != currentValue.toInt()) {
+        settings[j] = currentValue.toInt();
+      }
+      currentValue = "";
+      j++;
+    }
+    if (i == value.length() - 1) {
+      settings[j] = currentValue.toInt();
+    }
+  }
 }

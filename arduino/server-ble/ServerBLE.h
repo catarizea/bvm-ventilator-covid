@@ -17,6 +17,7 @@ class ServerBLE {
     ServerBLE();
     void start();
     void setSensorValue(byte sensor, uint16_t value);
+    std::string getSettings();
   private:
     BLEServer *_server;
     BLECharacteristic *_volumeCharacteristic;
