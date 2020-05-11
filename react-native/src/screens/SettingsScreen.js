@@ -6,7 +6,16 @@ import ScreenContainer from '../components/ScreenContainer';
 import RangeSlider from '../components/RangeSlider';
 
 const SettingsScreen = () => {
-  const handler = (value, fromUser, type) => {};
+  const handlerRange = (value, fromUser, type) => {
+    console.log(
+      'range',
+      `Type: ${type} Value: ${value} From User: ${fromUser}`,
+    );
+  };
+
+  const handlerButton = (type) => {
+    console.log('button', type);
+  };
 
   return (
     <ScreenContainer>
@@ -19,7 +28,7 @@ const SettingsScreen = () => {
             max={1600}
             step={50}
             initialLowValue={600}
-            handler={(low, fromUser) => handler(low, fromUser, 'volume')}
+            handler={(low, fromUser) => handlerRange(low, fromUser, 'volume')}
             label="Tidal Volume"
             unit="ml"
           />
@@ -29,7 +38,7 @@ const SettingsScreen = () => {
             max={30}
             step={1}
             initialLowValue={15}
-            handler={(low, fromUser) => handler(low, fromUser, 'rate')}
+            handler={(low, fromUser) => handlerRange(low, fromUser, 'rate')}
             label="Respiratory Rate"
             unit="per minute"
           />
@@ -40,7 +49,7 @@ const SettingsScreen = () => {
             step={1}
             initialLowValue={1}
             handler={(low, fromUser) => {
-              handler(low, fromUser, 'inspiration');
+              handlerRange(low, fromUser, 'inspiration');
             }}
             label="Inspiration Ratio"
           />
@@ -51,16 +60,25 @@ const SettingsScreen = () => {
             step={1}
             initialLowValue={2}
             handler={(low, fromUser) => {
-              handler(low, fromUser, 'expiration');
+              handlerRange(low, fromUser, 'expiration');
             }}
             label="Expiration Ratio"
           />
         </SafeAreaView>
         <View style={styles.buttonContainer}>
           <Button
+            icon="hand-left"
+            mode="contained"
+            style={[styles.button, styles.buttonStop]}
+            onPress={() => handlerButton('stop')}
+            labelStyle={styles.buttonLabel}>
+            Stop
+          </Button>
+          <Button
             icon="air-filter"
             mode="contained"
             style={styles.button}
+            onPress={() => handlerButton('start')}
             labelStyle={styles.buttonLabel}>
             Start
           </Button>
@@ -81,14 +99,18 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 2,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   button: {
     backgroundColor: '#25b35e',
   },
   buttonLabel: {
     fontSize: 25,
+  },
+  buttonStop: {
+    backgroundColor: 'red',
   },
 });
 

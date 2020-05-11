@@ -32,13 +32,15 @@ const RangeSlider = (props) => {
           onValueChanged={onChanged}
           initialLowValue={initialLowValue}
           lineWidth={8}
-          thumbRadius={12}
           selectionColor="#f2b600"
           blankColor="#141b41"
           labelBackgroundColor="#ffffff"
           labelBorderColor="#141b40"
           labelTextColor="#141b40"
           textSize={25}
+          thumbBorderColor="#141b40"
+          thumbBorderWidth={2}
+          thumbRadius={14}
         />
       </View>
       <View style={styles.valueColumn}>

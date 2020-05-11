@@ -11,8 +11,8 @@ const SettingsRoute = () => <SettingsScreen />;
 const initialState = {
   index: 0,
   routes: [
-    { key: 'charts', title: 'Visualize Charts', icon: 'chart-bell-curve' },
-    { key: 'settings', title: 'Change Settings', icon: 'tune' },
+    { key: 'charts', title: 'Charts', icon: 'chart-areaspline' },
+    { key: 'settings', title: 'Settings', icon: 'tune' },
   ],
 };
 
