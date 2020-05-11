@@ -45,6 +45,7 @@ const Grid = (props) => {
 
   gridLabels.push(
     <Text
+      key="grd-label-0-axis"
       fill={labelsColor}
       fontSize={labelsFontSize}
       textAnchor="middle"
@@ -82,6 +83,7 @@ const Grid = (props) => {
 
       gridLabels.push(
         <Text
+          key={`grd-label-${i}`}
           fill={labelsColor}
           fontSize={labelsFontSize}
           textAnchor="middle"
