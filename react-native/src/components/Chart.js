@@ -42,6 +42,7 @@ const Chart = (props) => {
     minValue,
     width,
     height,
+    marginBottom,
     lineColor,
     lineThickness,
     slotsPerWidth,
@@ -61,7 +62,7 @@ const Chart = (props) => {
 
   const polylinePoints = convertArrayToPolylinePoints({
     data,
-    height,
+    height: height - marginBottom,
     slotWidth,
     maxValue,
     minValue,
@@ -90,6 +91,7 @@ const Chart = (props) => {
           minValue={minValue}
           width={width}
           height={height}
+          marginBottom={marginBottom}
           gridColor={gridColor}
           gridThickness={gridThickness}
           unit={unit}
@@ -110,6 +112,7 @@ Chart.propTypes = {
   slotsPerWidth: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  marginBottom: PropTypes.number.isRequired,
   lineColor: PropTypes.string.isRequired,
   lineThickness: PropTypes.number.isRequired,
   chartBackground: PropTypes.string.isRequired,

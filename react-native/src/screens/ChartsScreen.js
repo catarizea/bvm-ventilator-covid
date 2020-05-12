@@ -3,17 +3,16 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 
 import ScreenContainer from '../components/ScreenContainer';
 import Chart from '../components/Chart';
-// import useInterval from '../utils/useInterval';
+import useInterval from '../utils/useInterval';
 
 const width = Dimensions.get('window').width;
 const height = Math.floor((Dimensions.get('window').height - 200) / 3);
-// let count = 1;
+let count = 1;
 
 const ChartsScreen = () => {
-  const [data, setData] = useState([0, 0, 0, 0, 1, 10, 50]);
+  const [data, setData] = useState([]);
   const slotsPerWidth = 100;
 
-  /*
   useInterval(() => {
     let newData = [];
     if (count <= slotsPerWidth) {
@@ -26,7 +25,6 @@ const ChartsScreen = () => {
     }
     setData(newData);
   }, 100);
-  */
 
   return (
     <ScreenContainer>
@@ -34,12 +32,13 @@ const ChartsScreen = () => {
         <Chart
           data={data}
           maxValue={100}
-          minValue={-100}
+          minValue={0}
           slotsPerWidth={slotsPerWidth}
           width={width}
           height={height}
+          marginBottom={20}
           lineColor="rgba(95, 92, 1, 1)"
-          lineThickness={4}
+          lineThickness={2}
           chartBackground="#17204d"
           horizontalGridLinesCount={5}
           gridColor="rgba(65, 95, 93, .4)"

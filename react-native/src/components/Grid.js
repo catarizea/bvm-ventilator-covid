@@ -6,6 +6,7 @@ const Grid = (props) => {
   const {
     width,
     height,
+    marginBottom,
     gridCount,
     marginLeft,
     maxValue,
@@ -19,7 +20,12 @@ const Grid = (props) => {
     labelsMarginLeft,
   } = props;
 
-  const spaceBetweenHorizontalGridLines = Math.floor(height / (gridCount + 1));
+  const netHeight = height - marginBottom;
+
+  const spaceBetweenHorizontalGridLines = Math.floor(
+    netHeight / (gridCount + 1),
+  );
+
   const deltaValuesBetweenHorizontalGridLines = Math.floor(
     Math.abs(maxValue - minValue) / (gridCount + 1),
   );
@@ -29,7 +35,8 @@ const Grid = (props) => {
 
   // add 0 axis
   const zeroY =
-    height - (height * Math.abs(minValue)) / Math.abs(maxValue - minValue);
+    netHeight -
+    (netHeight * Math.abs(minValue)) / Math.abs(maxValue - minValue);
 
   gridLines.push(
     <Line
@@ -67,7 +74,7 @@ const Grid = (props) => {
         continue;
       }
 
-      const Y = height - (i + 1) * spaceBetweenHorizontalGridLines;
+      const Y = netHeight - (i + 1) * spaceBetweenHorizontalGridLines;
 
       gridLines.push(
         <Line
@@ -110,6 +117,7 @@ Grid.propTypes = {
   minValue: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  marginBottom: PropTypes.number.isRequired,
   gridColor: PropTypes.string.isRequired,
   gridThickness: PropTypes.number.isRequired,
   unit: PropTypes.string.isRequired,
