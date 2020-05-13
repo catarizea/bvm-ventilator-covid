@@ -10,7 +10,7 @@ const RangeSlider = (props) => {
 
   useEffect(() => {
     handler(value, true);
-  });
+  }, [value]);
 
   const onChanged = (low, high, fromUser) => {
     setValue(low);

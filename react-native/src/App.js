@@ -1,4 +1,8 @@
+import 'react-native-gesture-handler';
 import React, { Component } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Appbar } from 'react-native-paper';
 import {
   StyleSheet,
   View,
@@ -11,11 +15,13 @@ import {
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import difference from 'lodash.difference';
+import { stringToBytes } from 'convert-string';
 
-import Navigation from './components/Navigation';
 import ScreenContainer from './components/ScreenContainer';
+import ChartsScreen from './screens/ChartsScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
-import { decode, encode } from './utils/utf8Convertor';
+import { decode } from './utils/utf8Convertor';
 import {
   DEVICE_UUID,
   SERVICE_UUID_SETTINGS,
@@ -27,6 +33,8 @@ import findPeripheral from './utils/findPeripheral';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
+const Tab = createBottomTabNavigator();
 
 class App extends Component {
   constructor() {
@@ -153,7 +161,10 @@ class App extends Component {
       return;
     }
 
-    this.setState({ sensorData: value.split('x') });
+    const valueArr = value.split('x');
+    const numbersArr = valueArr.map((item) => parseInt(item, 10));
+
+    this.setState({ sensorData: numbersArr });
   }
 
   handleStopScan() {
@@ -227,11 +238,11 @@ class App extends Component {
     const { settings } = this.state;
 
     if (
-      !settings.length ||
       !settingsArray.length ||
-      settings.length !== settingsArray.length ||
-      settings.length !== 4 ||
-      difference(settings, settingsArray).length
+      (settings.length &&
+        settings.length === settingsArray.length &&
+        settings.length === 4 &&
+        !difference(settings, settingsArray).length)
     ) {
       return;
     }
@@ -250,7 +261,7 @@ class App extends Component {
         DEVICE_UUID,
         SERVICE_UUID_SETTINGS,
         CHARACTERISTIC_UUID_SETTINGS,
-        encode(settingsString),
+        stringToBytes(settingsString),
       );
 
       console.log(`Settings written on device ${DEVICE_UUID}`);
@@ -309,14 +320,40 @@ class App extends Component {
     const { peripherals, sensorData } = this.state;
     const device = findPeripheral(peripherals, DEVICE_UUID);
     const isConnected = device && device.connected;
-    console.log('isConnected', isConnected);
 
     if (isConnected) {
       return (
-        <Navigation
-          sensorData={sensorData}
-          writeNewSettings={this.writeNewSettings}
-        />
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Charts">
+              {(props) => (
+                <>
+                  <Appbar.Header>
+                    <Appbar.Content
+                      title={'Charts | BVM Ventilator Covid-19'}
+                    />
+                  </Appbar.Header>
+                  <ChartsScreen {...props} sensorData={sensorData} />
+                </>
+              )}
+            </Tab.Screen>
+            <Tab.Screen name="Settings">
+              {(props) => (
+                <>
+                  <Appbar.Header>
+                    <Appbar.Content
+                      title={'Settings | BVM Ventilator Covid-19'}
+                    />
+                  </Appbar.Header>
+                  <SettingsScreen
+                    {...props}
+                    writeNewSettings={this.writeNewSettings}
+                  />
+                </>
+              )}
+            </Tab.Screen>
+          </Tab.Navigator>
+        </NavigationContainer>
       );
     }
 
