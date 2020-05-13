@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Appbar } from 'react-native-paper';
+import { Appbar, withTheme } from 'react-native-paper';
 import {
   StyleSheet,
   View,
@@ -16,6 +16,8 @@ import {
 import BleManager from 'react-native-ble-manager';
 import difference from 'lodash.difference';
 import { stringToBytes } from 'convert-string';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Color from 'color';
 
 import ScreenContainer from './components/ScreenContainer';
 import ChartsScreen from './screens/ChartsScreen';
@@ -318,13 +320,45 @@ class App extends Component {
 
   render() {
     const { peripherals, sensorData } = this.state;
+    const { theme } = this.props;
     const device = findPeripheral(peripherals, DEVICE_UUID);
     const isConnected = device && device.connected;
+    const primaryColor = Color(theme.colors.primary);
 
     if (isConnected) {
       return (
         <NavigationContainer>
-          <Tab.Navigator>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+
+                if (route.name === 'Charts') {
+                  iconName = 'chart-areaspline';
+                } else if (route.name === 'Settings') {
+                  iconName = 'tune';
+                }
+
+                return (
+                  <Icon name={iconName} size={25} color={theme.colors.accent} />
+                );
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: theme.colors.accent,
+              inactiveTintColor: theme.colors.accent,
+              activeBackgroundColor: primaryColor.darken(0.07).rgb(),
+              inactiveBackgroundColor: theme.colors.primary,
+              labelStyle: {
+                fontSize: 15,
+              },
+              style: {
+                borderTopWidth: 0,
+              },
+              tabStyle: {
+                borderTopWidth: 0,
+              },
+            }}>
             <Tab.Screen name="Charts">
               {(props) => (
                 <>
@@ -375,4 +409,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withTheme(App);

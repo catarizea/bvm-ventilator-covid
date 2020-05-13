@@ -131,7 +131,7 @@ class SettingsScreen extends Component {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 6,
+    flex: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: 2,
+    flex: 4,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
