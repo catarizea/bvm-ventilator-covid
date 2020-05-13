@@ -131,23 +131,18 @@ BLEService* ServerBLE::createBLEWriteService(
   return service;
 }
 
-void ServerBLE::setSensorValue(byte sensor, uint16_t value) {
-  char buffer[20];
-  
+void ServerBLE::setSensorValue(byte sensor, std::string value) {
   switch (sensor) {
     case 0:
-      dtostrf(value, 1, 2, buffer);
-      this->_flowCharacteristic->setValue((char*)&buffer);
+      this->_flowCharacteristic->setValue(value);
       this->_flowCharacteristic->notify();
       break;
     case 1:
-      dtostrf(value, 1, 0, buffer);
-      this->_volumeCharacteristic->setValue((char*)&buffer);
+      this->_volumeCharacteristic->setValue(value);
       this->_volumeCharacteristic->notify();
       break;
     case 2:
-      dtostrf(value, 1, 4, buffer);
-      this->_pressureCharacteristic->setValue((char*)&buffer);
+      this->_pressureCharacteristic->setValue(value);
       this->_pressureCharacteristic->notify();
       break;
   }
@@ -156,6 +151,3 @@ void ServerBLE::setSensorValue(byte sensor, uint16_t value) {
 std::string ServerBLE::getSettings() {
   return this->_settingsCharacteristic->getValue();
 }
-
-
-

@@ -20,7 +20,7 @@ const convertArrayToPolylinePoints = ({
   }
 
   for (let i = 0; i < data.length; i++) {
-    const Y = Math.floor(
+    const Y = Math.ceil(
       height -
         (height * Math.abs(data[i] - minValue)) / Math.abs(maxValue - minValue),
     );

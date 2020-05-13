@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import PropTypes from 'prop-types';
 
 import ScreenContainer from '../components/ScreenContainer';
 import RangeSlider from '../components/RangeSlider';
 
-const SettingsScreen = () => {
+const SettingsScreen = (props) => {
+  const { writeNewSettings } = props;
+  const [settings, setSettings] = useState([0, 0, 0, 0]);
+
   const handlerRange = (value, fromUser, type) => {
-    console.log(
-      'range',
-      `Type: ${type} Value: ${value} From User: ${fromUser}`,
-    );
+    const newSettings = [...settings];
+    const newValue = parseInt(value, 10);
+
+    switch (type) {
+      case 'volume':
+        newSettings[0] = newValue;
+        break;
+      case 'rate':
+        newSettings[1] = newValue;
+        break;
+      case 'inspiration':
+        newSettings[2] = newValue;
+        break;
+      case 'expiration':
+        newSettings[3] = newValue;
+        break;
+    }
+
+    setSettings(newSettings);
   };
 
   const handlerButton = (type) => {
-    console.log('button', type);
+    if (type === 'stop') {
+      writeNewSettings([0, 0, 0, 0]);
+    }
+
+    if (type === 'start') {
+      writeNewSettings(settings);
+    }
   };
 
   return (
@@ -113,5 +138,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
 });
+
+SettingsScreen.propTypes = {
+  writeNewSettings: PropTypes.func.isRequired,
+};
 
 export default SettingsScreen;

@@ -16,7 +16,7 @@ class ServerBLE {
   public:
     ServerBLE();
     void start();
-    void setSensorValue(byte sensor, uint16_t value);
+    void setSensorValue(byte sensor, std::string value);
     std::string getSettings();
   private:
     BLEServer *_server;

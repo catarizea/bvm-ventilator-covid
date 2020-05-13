@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "date-fns": "2.13.0",
+    "lodash.difference": "4.5.0",
     "lodash.get": "4.4.2",
     "prop-types": "15.7.2",
     "react": "16.11.0",
