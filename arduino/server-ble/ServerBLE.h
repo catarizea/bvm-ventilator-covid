@@ -16,13 +16,11 @@ class ServerBLE {
   public:
     ServerBLE();
     void start();
-    void setSensorValue(byte sensor, std::string value);
+    void setSensorsValue(std::string value);
     std::string getSettings();
   private:
     BLEServer *_server;
-    BLECharacteristic *_volumeCharacteristic;
-    BLECharacteristic *_flowCharacteristic;
-    BLECharacteristic *_pressureCharacteristic;
+    BLECharacteristic *_sensorsCharacteristic;
     BLECharacteristic *_settingsCharacteristic;
     BLEService *createBLEReadService(
       byte type,  

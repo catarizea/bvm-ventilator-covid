@@ -65,14 +65,10 @@ void loop(void) {
     delay(500);
   } else {
     if (messageSent == false) {
-      server.setSensorValue(0, "800");
-      server.setSensorValue(1, "foo");
-      server.setSensorValue(2, "245");
+      server.setSensorsValue("25x45x75");
       messageSent = true;
     } else {
-      server.setSensorValue(0, "400");
-      server.setSensorValue(1, "bar");
-      server.setSensorValue(2, "52");
+      server.setSensorsValue("12x77x44");
       messageSent = false;
     }
 

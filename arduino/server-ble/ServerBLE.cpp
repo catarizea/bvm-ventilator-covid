@@ -34,22 +34,10 @@ void ServerBLE::start() {
   BLEDevice::init("ESP32 BVM Device No. 1");
   this->_server = BLEDevice::createServer();
 
-  BLEService *flowService = this->createBLEReadService(
+  BLEService *sensorsService = this->createBLEReadService(
     0,
-    SERVICE_UUID_FLOW,
-    CHARACTERISTIC_UUID_FLOW
-  );
-
-  BLEService *volumeService = this->createBLEReadService(
-    1,
-    SERVICE_UUID_VOLUME,
-    CHARACTERISTIC_UUID_VOLUME
-  );
-
-  BLEService *pressureService = this->createBLEReadService(
-    2,
-    SERVICE_UUID_PRESSURE,
-    CHARACTERISTIC_UUID_PRESSURE
+    SERVICE_UUID_SENSORS,
+    CHARACTERISTIC_UUID_SENSORS
   );
 
   BLEService *settingsService = this->createBLEWriteService(
@@ -58,19 +46,13 @@ void ServerBLE::start() {
     CHARACTERISTIC_UUID_SETTINGS
   );
 
-  flowService->start();
-  volumeService->start();
-  pressureService->start();
+  sensorsService->start();
   settingsService->start();
 
   BLEAdvertising *advertising = BLEDevice::getAdvertising();
-  advertising->addServiceUUID(SERVICE_UUID_FLOW);
-  advertising->addServiceUUID(SERVICE_UUID_VOLUME);
-  advertising->addServiceUUID(SERVICE_UUID_PRESSURE);
+  advertising->addServiceUUID(SERVICE_UUID_SENSORS);
   advertising->addServiceUUID(SERVICE_UUID_SETTINGS);
   advertising->setScanResponse(true);
-  advertising->setMinPreferred(0x06);
-  advertising->setMinPreferred(0x12);
 
   BLEDevice::startAdvertising();
   
@@ -93,14 +75,8 @@ BLEService* ServerBLE::createBLEReadService(
   characteristic->addDescriptor(new BLE2902());
 
   switch (type) {
-    case 0:
-      this->_flowCharacteristic = characteristic;
-      break;
-    case 1:
-      this->_volumeCharacteristic = characteristic;
-      break;
-    case 2:
-      this->_pressureCharacteristic = characteristic;
+    default:
+      this->_sensorsCharacteristic = characteristic;
       break;
   }
 
@@ -131,21 +107,9 @@ BLEService* ServerBLE::createBLEWriteService(
   return service;
 }
 
-void ServerBLE::setSensorValue(byte sensor, std::string value) {
-  switch (sensor) {
-    case 0:
-      this->_flowCharacteristic->setValue(value);
-      this->_flowCharacteristic->notify();
-      break;
-    case 1:
-      this->_volumeCharacteristic->setValue(value);
-      this->_volumeCharacteristic->notify();
-      break;
-    case 2:
-      this->_pressureCharacteristic->setValue(value);
-      this->_pressureCharacteristic->notify();
-      break;
-  }
+void ServerBLE::setSensorsValue(std::string value) {
+  this->_sensorsCharacteristic->setValue(value);
+  this->_sensorsCharacteristic->notify();
 }
 
 std::string ServerBLE::getSettings() {
