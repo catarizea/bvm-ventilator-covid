@@ -6,14 +6,18 @@ import ScreenContainer from '../components/ScreenContainer';
 import Chart from '../components/Chart';
 
 const width = Dimensions.get('window').width;
-const height = Math.floor((Dimensions.get('window').height - 200) / 3);
+const height = Math.floor((Dimensions.get('window').height - 150) / 3);
 
 let counter = 0;
-const slotsPerWidth = 10;
+const slotsPerWidth = 100;
 
 class ChartsScreen extends Component {
   state = {
-    chartData: [],
+    chartData: {
+      flow: [],
+      volume: [],
+      pressure: [],
+    },
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -21,15 +25,39 @@ class ChartsScreen extends Component {
     const { sensorData } = props;
 
     if (sensorData.length && sensorData.length === 3) {
-      if (!chartData.length) {
+      if (!chartData.flow.length) {
         counter++;
-        return { chartData: [sensorData[0]] };
+        return {
+          chartData: {
+            flow: [sensorData[0]],
+            volume: [sensorData[1]],
+            pressure: [sensorData[2]],
+          },
+        };
       } else if (counter < slotsPerWidth) {
         counter++;
-        return { chartData: [...chartData, sensorData[0]] };
+        return {
+          chartData: {
+            flow: [...chartData.flow, sensorData[0]],
+            volume: [...chartData.volume, sensorData[1]],
+            pressure: [...chartData.pressure, sensorData[2]],
+          },
+        };
       } else {
         counter = 2;
-        return { chartData: [chartData[chartData.length - 1], sensorData[0]] };
+        return { 
+          chartData: {
+            flow: [chartData.flow[chartData.flow.length - 1], sensorData[0]],
+            volume: [
+              chartData.volume[chartData.volume.length - 1],
+              sensorData[1],
+            ],
+            pressure: [
+              chartData.pressure[chartData.pressure.length - 1],
+              sensorData[2],
+            ],
+          },
+        };
       }
     } else {
       return null;
@@ -37,11 +65,58 @@ class ChartsScreen extends Component {
   }
 
   render() {
+    const { flow, volume, pressure } = this.state.chartData;
+
     return (
       <ScreenContainer>
         <View style={styles.main}>
           <Chart
-            data={this.state.chartData}
+            key="flow"
+            data={flow}
+            maxValue={100}
+            minValue={0}
+            slotsPerWidth={slotsPerWidth}
+            width={width}
+            height={height}
+            marginBottom={20}
+            lineColor="rgba(95, 92, 1, 1)"
+            lineThickness={2}
+            chartBackground="#17204d"
+            horizontalGridLinesCount={5}
+            gridColor="rgba(65, 95, 93, .4)"
+            gridThickness={1}
+            unit="ml"
+            axisTooClose={10}
+            labelsColor="rgba(255, 255, 255, 0.8)"
+            labelsFontSize={12}
+            marginLeft={50}
+            labelsMarginLeft={15}
+          />
+          <Chart
+            key="volume"
+            data={volume}
+            maxValue={100}
+            minValue={0}
+            slotsPerWidth={slotsPerWidth}
+            width={width}
+            height={height}
+            marginBottom={20}
+            lineColor="rgba(95, 92, 1, 1)"
+            lineThickness={2}
+            chartBackground="#17204d"
+            horizontalGridLinesCount={5}
+            gridColor="rgba(65, 95, 93, .4)"
+            gridThickness={1}
+            unit="ml"
+            axisTooClose={10}
+            labelsColor="rgba(255, 255, 255, 0.8)"
+            labelsFontSize={12}
+            marginLeft={50}
+            labelsMarginLeft={15}
+          />
+          <Chart
+            key="pressure"
+            data={pressure}
             maxValue={100}
             minValue={0}
             slotsPerWidth={slotsPerWidth}
