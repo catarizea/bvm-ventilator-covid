@@ -45,7 +45,7 @@ class ChartsScreen extends Component {
         };
       } else {
         counter = 2;
-        return { 
+        return {
           chartData: {
             flow: [chartData.flow[chartData.flow.length - 1], sensorData[0]],
             volume: [

@@ -107,8 +107,8 @@ BLEService* ServerBLE::createBLEWriteService(
   return service;
 }
 
-void ServerBLE::setSensorsValue(std::string value) {
-  this->_sensorsCharacteristic->setValue(value);
+void ServerBLE::setSensorsValue(char* buffer) {
+  this->_sensorsCharacteristic->setValue(buffer);
   this->_sensorsCharacteristic->notify();
 }
 

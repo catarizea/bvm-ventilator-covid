@@ -3,6 +3,7 @@
   Created by Catalin Rizea, May 8, 2020
   Released into the public domain 
 */
+#include <DHT.h>
 #include <Wire.h>
 #include "Lcd.h"
 #include "ServerBLE.h"
@@ -23,7 +24,19 @@ TwoWire I2Ctwo = TwoWire(1);
 
 bool messageSent = false;
 
+const int tempPin = 15;
+DHT dht(tempPin, DHT11);
+
+const int photoPin = 35;
+const int soundPin = 32;
+
+unsigned long previousMillis = 0;
+const long sensorsInterval = 100; 
+
 void setup(void) {
+  pinMode(photoPin, INPUT);
+  pinMode(soundPin, INPUT);
+  
   pinMode(translatorOEPin, OUTPUT);
   digitalWrite(translatorOEPin, LOW);
   
@@ -38,6 +51,7 @@ void setup(void) {
   I2Ctwo.begin(21, 22, 100000);
   
   lcd.start();
+  dht.begin();
 }
 
 void loop(void) {
@@ -64,15 +78,26 @@ void loop(void) {
     
     delay(500);
   } else {
-    if (messageSent == false) {
-      server.setSensorsValue("25x45x75");
-      messageSent = true;
-    } else {
-      server.setSensorsValue("12x77x44");
-      messageSent = false;
-    }
+    unsigned long currentMillis = millis();
 
-    delay(3000);
+    if (currentMillis - previousMillis >= sensorsInterval) {
+      previousMillis = currentMillis;
+      
+      int tempVal = dht.readTemperature() * 10;
+      int photoVal = analogRead(photoPin);
+      int soundVal = analogRead(soundPin);
+      
+      Serial.println("Photo sensor " + String(photoVal));
+      Serial.println("Sound sensor " + String(soundVal));
+      Serial.println("Temp sensor " + String(tempVal));
+      
+      String cumulated = String(soundVal) + "x" + String(photoVal) + "x" + String(tempVal);
+      
+      char buffer[cumulated.length() + 1];
+      cumulated.toCharArray(buffer, cumulated.length() + 1);
+      
+      server.setSensorsValue((char*)&buffer);
+    }
   }
 }
 
