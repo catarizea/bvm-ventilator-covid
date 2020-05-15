@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ScreenContainer from '../components/ScreenContainer';
 import RangeSlider from '../components/RangeSlider';
 
-class SettingsScreen extends Component {
+class SettingsScreen extends PureComponent {
   constructor(props) {
     super(props);
 

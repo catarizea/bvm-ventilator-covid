@@ -1,56 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import Slider from 'rn-range-slider';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Text } from 'react-native-paper';
+import debounce from 'lodash.debounce';
 
-const RangeSlider = (props) => {
-  const { min, max, step, handler, initialLowValue, label, unit } = props;
-  const [value, setValue] = useState(initialLowValue);
+class RangeSlider extends Component {
+  constructor(props) {
+    super(props);
 
-  useEffect(() => {
-    handler(value, true);
-  }, [value]);
+    this.state = {
+      value: props.initialLowValue,
+    };
 
-  const onChanged = (low, high, fromUser) => {
-    setValue(low);
-  };
+    this.onChanged = this.onChanged.bind(this);
+  }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.labelColumn}>
-        <Text style={styles.labelText}>{label}</Text>
+  onChanged(low, high, fromUser) {
+    if (this.state.value === low) {
+      return;
+    }
+
+    this.setState({ value: low }, () => {
+      this.props.handler(low, true);
+    });
+  }
+
+  render() {
+    const { min, max, step, initialLowValue, label, unit } = this.props;
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.labelColumn}>
+          <Text style={styles.labelText}>{label}</Text>
+        </View>
+        <View style={styles.sliderColumn}>
+          <Slider
+            style={styles.slider}
+            gravity={'center'}
+            min={min}
+            max={max}
+            step={step}
+            rangeEnabled={false}
+            onValueChanged={debounce(this.onChanged, 250)}
+            initialLowValue={initialLowValue}
+            lineWidth={8}
+            selectionColor="#f2b600"
+            blankColor="#141b41"
+            labelBackgroundColor="#ffffff"
+            labelBorderColor="#141b40"
+            labelTextColor="#141b40"
+            textSize={25}
+            thumbBorderColor="#141b40"
+            thumbBorderWidth={2}
+            thumbRadius={14}
+          />
+        </View>
+        <View style={styles.valueColumn}>
+          <Text style={[styles.labelText, styles.valueText]}>
+            {this.state.value} {unit}
+          </Text>
+        </View>
       </View>
-      <View style={styles.sliderColumn}>
-        <Slider
-          style={styles.slider}
-          gravity={'center'}
-          min={min}
-          max={max}
-          step={step}
-          rangeEnabled={false}
-          onValueChanged={onChanged}
-          initialLowValue={initialLowValue}
-          lineWidth={8}
-          selectionColor="#f2b600"
-          blankColor="#141b41"
-          labelBackgroundColor="#ffffff"
-          labelBorderColor="#141b40"
-          labelTextColor="#141b40"
-          textSize={25}
-          thumbBorderColor="#141b40"
-          thumbBorderWidth={2}
-          thumbRadius={14}
-        />
-      </View>
-      <View style={styles.valueColumn}>
-        <Text style={[styles.labelText, styles.valueText]}>
-          {value} {unit}
-        </Text>
-      </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 RangeSlider.propTypes = {
   label: PropTypes.string.isRequired,

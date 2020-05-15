@@ -73,8 +73,8 @@ class ChartsScreen extends Component {
           <Chart
             key="flow"
             data={flow}
-            maxValue={100}
-            minValue={0}
+            maxValue={1900}
+            minValue={1750}
             slotsPerWidth={slotsPerWidth}
             width={width}
             height={height}
@@ -89,14 +89,14 @@ class ChartsScreen extends Component {
             axisTooClose={10}
             labelsColor="rgba(255, 255, 255, 0.8)"
             labelsFontSize={12}
-            marginLeft={50}
+            marginLeft={60}
             labelsMarginLeft={15}
           />
           <Chart
             key="volume"
             data={volume}
-            maxValue={100}
-            minValue={0}
+            maxValue={3000}
+            minValue={100}
             slotsPerWidth={slotsPerWidth}
             width={width}
             height={height}
@@ -111,14 +111,14 @@ class ChartsScreen extends Component {
             axisTooClose={10}
             labelsColor="rgba(255, 255, 255, 0.8)"
             labelsFontSize={12}
-            marginLeft={50}
+            marginLeft={60}
             labelsMarginLeft={15}
           />
           <Chart
             key="pressure"
             data={pressure}
-            maxValue={100}
-            minValue={0}
+            maxValue={400}
+            minValue={250}
             slotsPerWidth={slotsPerWidth}
             width={width}
             height={height}
@@ -133,7 +133,7 @@ class ChartsScreen extends Component {
             axisTooClose={10}
             labelsColor="rgba(255, 255, 255, 0.8)"
             labelsFontSize={12}
-            marginLeft={50}
+            marginLeft={60}
             labelsMarginLeft={15}
           />
         </View>

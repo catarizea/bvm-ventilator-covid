@@ -10,6 +10,7 @@ const int I2CSlaveAddress = 4;
 
 bool homeSet = false;
 bool isHoming = true;
+bool isStopping = false;
 
 const int stepperParamsSize = 3;
 int stepperParams[stepperParamsSize] = {0, 0, 0};
@@ -53,19 +54,29 @@ void loop() {
     executeHoming();
   }
 
-  if (isHoming == false) {
+  if (isStopping == true) {
+    stopStepper();
+  }
+
+  if (isHoming == false && isStopping == false) {
     if (hasNewValues() == true) {
       Serial.println("hasNewValues");
       
-      if (prevSettings[0] != 0) {
-        newStepperParams = true;  
-      }
-      
-      for (int i = 0; i < settingsSize; i++) {
-        prevSettings[i] = settings[i];
+      if (isItStopping() == true) {
+        isStopping = true;
       }
 
-      computeNewParams();
+      if (isStopping == false) {
+        if (prevSettings[0] != 0) {
+          newStepperParams = true;  
+        }
+
+        computeNewParams();
+      }
+
+      for (int i = 0; i < settingsSize; i++) {
+        prevSettings[i] = settings[i];
+      }  
     }
 
     if (nothingToDo() == true) {
@@ -89,6 +100,21 @@ void loop() {
     }
     
     moveStepper();
+  }
+}
+
+void stopStepper() {
+  Serial.println("stopStepper move to zero");
+  stepper.moveTo(0);
+  stepper.setSpeed(defaultSpeed);
+  stepper.runSpeedToPosition();
+
+  printPositionalData();
+  if (stepper.distanceToGo() != 0) {
+    return;
+  } else {
+    Serial.println("Stepper is back at zero");
+    isStopping = false;
   }
 }
 
@@ -244,4 +270,16 @@ void computeNewParams() {
   Serial.println("stepperParams[0]: " + String(stepperParams[0]));
   Serial.println("stepperParams[1]: " + String(stepperParams[1]));
   Serial.println("stepperParams[2]: " + String(stepperParams[2]));
+}
+
+bool isItStopping() {
+  bool resp = false;
+
+  for (int i = 0; i < settingsSize; i++) {
+    if (resp == false && settings[i] == 0) {
+      resp = true;
+    }
+  }
+
+  return resp;
 }

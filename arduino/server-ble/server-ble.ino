@@ -58,9 +58,12 @@ void loop(void) {
   refreshSettings();
   
   if (checkIfNewValues(settings, prevSettings, size) == true) {
-    lcd.printSettings(settings[0], settings[1], settings[2], settings[3]);
-
-    Serial.println("From Lcd: " + lcd.getSettingsAsString());
+    if (isStopping() == true) {
+      lcd.printNoSettings();
+    } else {
+      lcd.printSettings(settings[0], settings[1], settings[2], settings[3]);
+      Serial.println("From Lcd: " + lcd.getSettingsAsString());
+    }
     
     I2Ctwo.beginTransmission(I2CSlaveAddress);
     
@@ -139,4 +142,16 @@ void refreshSettings() {
       settings[j] = currentValue.toInt();
     }
   }
+}
+
+bool isStopping() {
+  bool resp = false;
+
+  for (byte i = 0; i < size; i++) {
+    if (resp == false && settings[i] == 0) {
+      resp = true;
+    }
+  }
+
+  return resp;
 }

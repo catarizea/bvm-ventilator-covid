@@ -18,6 +18,12 @@ void Lcd::start() {
   this->_lcd.init();
   this->_lcd.backlight();
   
+  this->printNoSettings();
+}
+
+void Lcd::printNoSettings() {
+  this->_lcd.clear();
+  this->_lcd.setCursor(0, 0);
   this->_lcd.print(settings);
   this->_lcd.setCursor(0, 1);
   this->_lcd.print(noSettings);
