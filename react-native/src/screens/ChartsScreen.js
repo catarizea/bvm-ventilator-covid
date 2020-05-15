@@ -29,6 +29,7 @@ class ChartsScreen extends Component {
     } = props;
 
     if (!isFocused()) {
+      counter = 0;
       return { chartData: { ...initialState } };
     }
 
