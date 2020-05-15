@@ -127,7 +127,7 @@ class SettingsScreen extends PureComponent {
       </ScreenContainer>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   main: {

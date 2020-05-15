@@ -10,19 +10,27 @@ const height = Math.floor((Dimensions.get('window').height - 150) / 3);
 
 let counter = 0;
 const slotsPerWidth = 100;
+const initialState = {
+  flow: [],
+  volume: [],
+  pressure: [],
+};
 
 class ChartsScreen extends Component {
   state = {
-    chartData: {
-      flow: [],
-      volume: [],
-      pressure: [],
-    },
+    chartData: { ...initialState },
   };
 
   static getDerivedStateFromProps(props, state) {
     const { chartData } = state;
-    const { sensorData } = props;
+    const {
+      sensorData,
+      navigation: { isFocused },
+    } = props;
+
+    if (!isFocused()) {
+      return { chartData: { ...initialState } };
+    }
 
     if (sensorData.length && sensorData.length === 3) {
       if (!chartData.flow.length) {
@@ -66,6 +74,14 @@ class ChartsScreen extends Component {
 
   render() {
     const { flow, volume, pressure } = this.state.chartData;
+
+    if (!this.props.navigation.isFocused()) {
+      return (
+        <ScreenContainer>
+          <View style={styles.main} />
+        </ScreenContainer>
+      );
+    }
 
     return (
       <ScreenContainer>
