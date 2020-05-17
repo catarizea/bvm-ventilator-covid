@@ -123,7 +123,8 @@ void refreshSettings() {
     return;
   }
 
-  // Serial.println(value.c_str());
+  Serial.print("Settings value: ");
+  Serial.println(value.c_str());
   
   int j = 0;
   String currentValue = "";
