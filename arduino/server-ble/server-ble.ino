@@ -28,14 +28,14 @@ const int tempPin = 15;
 DHT dht(tempPin, DHT11);
 
 const int photoPin = 35;
-const int soundPin = 32;
+const int magneticPin = 32;
 
 unsigned long previousMillis = 0;
 const long sensorsInterval = 100; 
 
 void setup(void) {
   pinMode(photoPin, INPUT);
-  pinMode(soundPin, INPUT);
+  pinMode(magneticPin, INPUT);
   
   pinMode(translatorOEPin, OUTPUT);
   digitalWrite(translatorOEPin, LOW);
@@ -88,13 +88,13 @@ void loop(void) {
       
       int tempVal = dht.readTemperature() * 10;
       int photoVal = analogRead(photoPin);
-      int soundVal = analogRead(soundPin);
+      int magneticVal = analogRead(magneticPin);
       
       Serial.println("Photo sensor " + String(photoVal));
-      Serial.println("Sound sensor " + String(soundVal));
+      Serial.println("Magnetic sensor " + String(magneticVal));
       Serial.println("Temp sensor " + String(tempVal));
       
-      String cumulated = String(soundVal) + "x" + String(photoVal) + "x" + String(tempVal);
+      String cumulated = String(magneticVal) + "x" + String(photoVal) + "x" + String(tempVal);
       
       char buffer[cumulated.length() + 1];
       cumulated.toCharArray(buffer, cumulated.length() + 1);
