@@ -24,7 +24,7 @@ import {
   SERVICE_UUID_SENSORS,
   CHARACTERISTIC_UUID_SETTINGS,
   CHARACTERISTIC_UUID_SENSORS,
-} from './constants/bleUUIDs';
+} from './secrets/bleUUIDs';
 import findPeripheral from './utils/findPeripheral';
 
 const BleManagerModule = NativeModules.BleManager;
