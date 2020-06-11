@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import PropTypes from 'prop-types';
@@ -6,128 +6,115 @@ import PropTypes from 'prop-types';
 import ScreenContainer from '../components/ScreenContainer';
 import RangeSlider from '../components/RangeSlider';
 
-class SettingsScreen extends PureComponent {
-  constructor(props) {
-    super(props);
+const SettingsScreen = ({ writeNewSettings }) => {
+  const [settings, setSettings] = useState({
+    volume: 600,
+    rate: 15,
+    inspiration: 1,
+    expiration: 2,
+  });
 
-    this.state = {
-      settings: [600, 15, 1, 2],
-    };
-
-    this.handlerRange = this.handlerRange.bind(this);
-    this.handlerButton = this.handlerButton.bind(this);
-  }
-
-  handlerRange(value, fromUser, type) {
-    const newSettings = [...this.state.settings];
+  const handlerRange = (value, fromUser, type) => {
+    const newSettings = { ...settings };
     const newValue = parseInt(value, 10);
 
-    switch (type) {
-      case 'volume':
-        newSettings[0] = newValue;
-        break;
-      case 'rate':
-        newSettings[1] = newValue;
-        break;
-      case 'inspiration':
-        newSettings[2] = newValue;
-        break;
-      case 'expiration':
-        newSettings[3] = newValue;
-        break;
+    if (newSettings[type] === newValue) {
+      return;
     }
 
-    this.setState({ settings: newSettings });
-  }
+    newSettings[type] = newValue;
+    setSettings(newSettings);
+  };
 
-  handlerButton(type) {
+  const handlerButton = (type) => {
     if (type === 'stop') {
-      this.props.writeNewSettings([0, 0, 0, 0]);
+      writeNewSettings([0, 0, 0, 0]);
     }
 
     if (type === 'start') {
-      this.props.writeNewSettings(this.state.settings);
+      writeNewSettings([
+        settings.volume,
+        settings.rate,
+        settings.inspiration,
+        settings.expiration,
+      ]);
     }
-  }
+  };
 
-  render() {
-    const { settings } = this.state;
-
-    return (
-      <ScreenContainer>
-        <>
-          <View style={styles.spaceUp} />
-          <SafeAreaView style={styles.main}>
-            <RangeSlider
-              key="volume"
-              min={100}
-              max={1600}
-              step={50}
-              initialLowValue={settings[0]}
-              handler={(low, fromUser) =>
-                this.handlerRange(low, fromUser, 'volume')
-              }
-              label="Tidal Volume"
-              unit="ml"
-            />
-            <RangeSlider
-              key="rate"
-              min={10}
-              max={30}
-              step={1}
-              initialLowValue={settings[1]}
-              handler={(low, fromUser) =>
-                this.handlerRange(low, fromUser, 'rate')
-              }
-              label="Respiratory Rate"
-              unit="per minute"
-            />
-            <RangeSlider
-              key="inspiration"
-              min={1}
-              max={5}
-              step={1}
-              initialLowValue={settings[2]}
-              handler={(low, fromUser) => {
-                this.handlerRange(low, fromUser, 'inspiration');
-              }}
-              label="Inspiration Ratio"
-            />
-            <RangeSlider
-              key="expiration"
-              min={1}
-              max={5}
-              step={1}
-              initialLowValue={settings[3]}
-              handler={(low, fromUser) => {
-                this.handlerRange(low, fromUser, 'expiration');
-              }}
-              label="Expiration Ratio"
-            />
-          </SafeAreaView>
-          <View style={styles.buttonContainer}>
-            <Button
-              icon="hand-left"
-              mode="contained"
-              style={[styles.button, styles.buttonStop]}
-              onPress={() => this.handlerButton('stop')}
-              labelStyle={styles.buttonLabel}>
-              Stop
-            </Button>
-            <Button
-              icon="air-filter"
-              mode="contained"
-              style={styles.button}
-              onPress={() => this.handlerButton('start')}
-              labelStyle={styles.buttonLabel}>
-              Start
-            </Button>
-          </View>
-        </>
-      </ScreenContainer>
-    );
-  }
-}
+  return (
+    <ScreenContainer>
+      <>
+        <View style={styles.spaceUp} />
+        <SafeAreaView style={styles.main}>
+          <RangeSlider
+            key="volume"
+            min={100}
+            max={1600}
+            step={50}
+            initialLowValue={settings.volume}
+            handler={(low, fromUser) => handlerRange(low, fromUser, 'volume')}
+            label="Tidal Volume"
+            unit="ml"
+            currentValue={settings.volume}
+          />
+          <RangeSlider
+            key="rate"
+            min={10}
+            max={30}
+            step={1}
+            initialLowValue={settings.rate}
+            handler={(low, fromUser) => handlerRange(low, fromUser, 'rate')}
+            label="Respiratory Rate"
+            unit="per minute"
+            currentValue={settings.rate}
+          />
+          <RangeSlider
+            key="inspiration"
+            min={1}
+            max={5}
+            step={1}
+            initialLowValue={settings.inspiration}
+            handler={(low, fromUser) => {
+              handlerRange(low, fromUser, 'inspiration');
+            }}
+            label="Inspiration Ratio"
+            currentValue={settings.inspiration}
+          />
+          <RangeSlider
+            key="expiration"
+            min={1}
+            max={5}
+            step={1}
+            initialLowValue={settings.expiration}
+            handler={(low, fromUser) => {
+              handlerRange(low, fromUser, 'expiration');
+            }}
+            label="Expiration Ratio"
+            currentValue={settings.expiration}
+          />
+        </SafeAreaView>
+        <View style={styles.buttonContainer}>
+          <Button
+            icon="hand-left"
+            mode="contained"
+            style={[styles.button, styles.buttonStop]}
+            onPress={() => handlerButton('stop')}
+            labelStyle={styles.buttonLabel}>
+            Stop
+          </Button>
+          <Button
+            icon="air-filter"
+            mode="contained"
+            style={styles.button}
+            onPress={() => handlerButton('start')}
+            labelStyle={styles.buttonLabel}>
+            Start
+          </Button>
+        </View>
+      </>
+    </ScreenContainer>
+  );
+};
 
 const styles = StyleSheet.create({
   main: {
