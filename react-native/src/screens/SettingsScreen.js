@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ScreenContainer from '../components/ScreenContainer';
 import RangeSlider from '../components/RangeSlider';
 
-const SettingsScreen = ({ writeNewSettings }) => {
+const SettingsScreen = React.memo(({ writeNewSettings }) => {
   const [settings, setSettings] = useState({
     volume: 600,
     rate: 15,
@@ -114,7 +114,7 @@ const SettingsScreen = ({ writeNewSettings }) => {
       </>
     </ScreenContainer>
   );
-};
+});
 
 const styles = StyleSheet.create({
   main: {
