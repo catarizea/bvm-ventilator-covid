@@ -69,26 +69,6 @@ class App extends Component {
       this.handleUpdateValueForCharacteristic,
     );
 
-    if (Platform.OS === 'android' && Platform.Version >= 23) {
-      const result = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-      );
-
-      if (result) {
-        console.log('Permission is OK');
-      } else {
-        const res = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-        );
-
-        if (res) {
-          console.log('User accept');
-        } else {
-          console.log('User refuse');
-        }
-      }
-    }
-
     this.startScan();
   };
 
