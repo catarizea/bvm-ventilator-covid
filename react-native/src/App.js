@@ -163,25 +163,6 @@ class App extends Component {
     }
   };
 
-  retrieveConnected = async () => {
-    const results = await BleManager.getConnectedPeripherals([]);
-    console.log('Connected peripherals', results);
-    if (!results || results.length === 0) {
-      console.log('No connected peripherals');
-      return;
-    }
-
-    const { peripherals } = this.state;
-
-    for (let i = 0; i < results.length; i++) {
-      const peripheral = results[i];
-      peripheral.connected = true;
-
-      peripherals.set(peripheral.id, peripheral);
-      this.setState({ peripherals });
-    }
-  };
-
   handleDiscoverPeripheral = (peripheral) => {
     const { peripherals } = this.state;
 
