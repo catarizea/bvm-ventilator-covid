@@ -1,12 +1,12 @@
 {
-  "name": "BVMVentilatorCovid",
+  "name": "bvm-ventilator-covid",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "clear-modules": "rm -rf node_modules",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start -- --reset-cache",
     "test": "jest",
     "lint": "eslint ."
   },

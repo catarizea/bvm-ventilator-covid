@@ -31,31 +31,15 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 class App extends Component {
-  constructor() {
-    super();
+  state = {
+    settings: [],
+    sensorData: [],
+    scanning: false,
+    peripherals: new Map(),
+    appState: '',
+  };
 
-    this.state = {
-      settings: [],
-      sensorData: [],
-      scanning: false,
-      peripherals: new Map(),
-      appState: '',
-    };
-
-    this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
-    this.handleStopScan = this.handleStopScan.bind(this);
-    this.handleUpdateValueForCharacteristic = this.handleUpdateValueForCharacteristic.bind(
-      this,
-    );
-    this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(
-      this,
-    );
-    this.handleAppStateChange = this.handleAppStateChange.bind(this);
-    this.writeNewSettings = this.writeNewSettings.bind(this);
-    this.hookUpSensorNotifications = this.hookUpSensorNotifications.bind(this);
-  }
-
-  async componentDidMount() {
+  componentDidMount = async () => {
     AppState.addEventListener('change', this.handleAppStateChange);
 
     try {
@@ -106,9 +90,9 @@ class App extends Component {
     }
 
     this.startScan();
-  }
+  };
 
-  async handleAppStateChange(nextAppState) {
+  handleAppStateChange = async (nextAppState) => {
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
@@ -123,16 +107,16 @@ class App extends Component {
     }
 
     this.setState({ appState: nextAppState });
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     this.handlerDiscover.remove();
     this.handlerStop.remove();
     this.handlerDisconnect.remove();
     this.handlerUpdate.remove();
-  }
+  };
 
-  handleDisconnectedPeripheral(data) {
+  handleDisconnectedPeripheral = (data) => {
     const { peripherals } = this.state;
     const peripheral = peripherals.get(data.peripheral);
 
@@ -142,9 +126,9 @@ class App extends Component {
       this.setState({ peripherals });
     }
     console.log('Disconnected from ' + data.peripheral);
-  }
+  };
 
-  handleUpdateValueForCharacteristic(data) {
+  handleUpdateValueForCharacteristic = (data) => {
     if (!data.value) {
       return;
     }
@@ -159,9 +143,9 @@ class App extends Component {
     const numbersArr = valueArr.map((item) => parseInt(item, 10));
 
     this.setState({ sensorData: numbersArr });
-  }
+  };
 
-  handleStopScan() {
+  handleStopScan = () => {
     this.setState({ scanning: false }, async () => {
       console.log('Scan is stopped');
       const { peripherals } = this.state;
@@ -183,9 +167,9 @@ class App extends Component {
         this.hookUpSensorNotifications(device);
       }
     });
-  }
+  };
 
-  async startScan() {
+  startScan = async () => {
     if (this.state.scanning) {
       return;
     }
@@ -196,9 +180,9 @@ class App extends Component {
       console.log('Scanning...');
       this.setState({ scanning: true });
     }
-  }
+  };
 
-  async retrieveConnected() {
+  retrieveConnected = async () => {
     const results = await BleManager.getConnectedPeripherals([]);
     console.log('Connected peripherals', results);
     if (!results || results.length === 0) {
@@ -215,9 +199,9 @@ class App extends Component {
       peripherals.set(peripheral.id, peripheral);
       this.setState({ peripherals });
     }
-  }
+  };
 
-  handleDiscoverPeripheral(peripheral) {
+  handleDiscoverPeripheral = (peripheral) => {
     const { peripherals } = this.state;
 
     if (!peripheral.name) {
@@ -226,9 +210,9 @@ class App extends Component {
 
     peripherals.set(peripheral.id, peripheral);
     this.setState({ peripherals });
-  }
+  };
 
-  async writeNewSettings(settingsArray) {
+  writeNewSettings = async (settingsArray) => {
     const { settings } = this.state;
 
     if (
@@ -263,9 +247,9 @@ class App extends Component {
     } catch (error) {
       console.log('Settings write error', error);
     }
-  }
+  };
 
-  async hookUpSensorNotifications(peripheral) {
+  hookUpSensorNotifications = async (peripheral) => {
     if (!peripheral) {
       return;
     }
@@ -308,9 +292,9 @@ class App extends Component {
     } catch (error) {
       console.log('Connection error', error);
     }
-  }
+  };
 
-  render() {
+  render = () => {
     const { peripherals, sensorData } = this.state;
     const device = findPeripheral(peripherals, DEVICE_UUID);
     const isConnected = device && device.connected;
@@ -331,7 +315,7 @@ class App extends Component {
         </View>
       </ScreenContainer>
     );
-  }
+  };
 }
 
 const styles = StyleSheet.create({
