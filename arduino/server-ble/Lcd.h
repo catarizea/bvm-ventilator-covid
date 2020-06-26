@@ -12,7 +12,7 @@
 
 class Lcd {
   public:
-    Lcd();
+    Lcd(int sda, int clk);
     void start();
     void printSettings(int volume, int bpm, int inspiration, int expiration);
     String getSettingsAsString();
@@ -23,6 +23,8 @@ class Lcd {
     int _bpm;
     int _inspiration;
     int _expiration;
+    int _sda;
+    int _clk;
     LiquidCrystal_I2C _lcd;
 };
 

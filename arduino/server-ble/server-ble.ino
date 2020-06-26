@@ -8,7 +8,7 @@
 #include "Lcd.h"
 #include "ServerBLE.h"
 
-Lcd lcd;
+Lcd lcd(18, 19);
 ServerBLE server;
 
 const int I2CSlaveAddress = 4;

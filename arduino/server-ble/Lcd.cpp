@@ -10,10 +10,13 @@
 #include "Lcd.h"
 #include "translations.h"
 
-Lcd::Lcd(): _lcd(0x3F, 20, 4)  {}
+Lcd::Lcd(int sda, int clk): _lcd(0x3F, 20, 4)  {
+  this->_sda = sda;
+  this->_clk = clk;
+}
 
 void Lcd::start() {
-  Wire.begin(18, 19);
+  Wire.begin(this->_sda, this->_clk);
   
   this->_lcd.init();
   this->_lcd.backlight();
