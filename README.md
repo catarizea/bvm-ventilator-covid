@@ -7,3 +7,27 @@ Please refer to the following blog posts for documentation:
 * [Bluetooth Low Energy Client on a React Native Application](https://catalin.works/blog/bluetooth-low-energy-client-on-react-native-application/)
 * [Custom Arduino library for I2C LCD2004](https://catalin.works/blog/custom-arduino-library-i2c-lcd2004/)
 * [Realtime charting on React Native using data from ESP32 Arduino sensors](https://catalin.works/blog/realtime-charting-react-native-esp32-arduino-sensors/)
+
+You need to create 2 files to store the Bluetooth Low Energy UUIDS:
+
+* `/arduino/server-ble/secret.h`
+
+```cpp
+#define SERVICE_UUID_SENSORS "<your-UUID>"
+#define SERVICE_UUID_SETTINGS "<your-UUID>"
+
+#define CHARACTERISTIC_UUID_SENSORS "<your-UUID>"
+#define CHARACTERISTIC_UUID_SETTINGS "<your-UUID>"
+```
+
+* `/react-native/src/secrets/bleUUIDs.js`
+  
+```javascript
+export const DEVICE_UUID = '<your-UUID>';
+export const SERVICE_UUID_SENSORS = '<your-UUID>';
+export const SERVICE_UUID_SETTINGS = '<your-UUID>';
+export const CHARACTERISTIC_UUID_SENSORS =
+  '<your-UUID>';
+export const CHARACTERISTIC_UUID_SETTINGS =
+  '<your-UUID>';
+```
