@@ -31,3 +31,5 @@ export const CHARACTERISTIC_UUID_SENSORS =
 export const CHARACTERISTIC_UUID_SETTINGS =
   '<your-UUID>';
 ```
+
+You can watch a [short videoclip describing my test setup](https://youtu.be/awpPbv5pDBg). My comments are in Romanian language but the images are clear enough for anyone.
