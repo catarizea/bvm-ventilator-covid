@@ -1,5 +1,7 @@
 # bvm-ventilator-covid
 
+This is work in progress. The current stage has functional BLE server and client, React Native basic interface for the Nema 23 closed loop stepper motor and the LCD2004. So it is just the beginning. Feel free to take all knowledge from this repository and to continue the project by yourself. 
+
 Please refer to the following blog posts for documentation:
 
 * [Controlling a Nema 23 closed loop stepper motor with Arduino Nano](https://catalin.works/blog/controlling-nema-23-closed-loop-stepper-motor-arduino-nano/)
